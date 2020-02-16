@@ -8,24 +8,30 @@ namespace _2048
 {
     public class Point
     {
-        public int _line { get; set; }
-        public int _column { get; set; }
+        public int Line { get; set; }
+        public int Column { get; set; }
 
         
         public Point(int line, int column)
         {
-            _line = line;
-            _column = column;
+            Line = line;
+            Column = column;
         }
     }
 
-    class FreeCellCoordinates
+    class EmptyTile
     {        
         private List<Point> list = new List<Point>();
 
-        
+        public void Tile(int [,] items)
+        {
+            for (int i = 0; i < items.GetLength(0); i++)
+                for (int j = 0; j < items.GetLength(1); j++)
+                    if (items[i, j] == 0)
+                        this.Add(i, j);
+        }
 
-        public void ListEntry(int line, int column)
+        public void Add(int line, int column)
         {
             list.Add(new Point(line, column));
         }
@@ -33,7 +39,7 @@ namespace _2048
         public Point RandomEmptyCell()
         {
             int number = list.Count;
-            number = RandomUnfilledPlace.Value(number);
+            number = RandomValue.Value(number);
             return list[number];
         }
     }

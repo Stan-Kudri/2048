@@ -9,12 +9,17 @@ namespace _2048
     class RandomValue
     {
         private static Random rnd = new Random();
-        private static int [] value = new int []{2,4};
 
-        public static int Value()
+        public static int Tile(int [] value)
         {
-            int k = rnd.Next(0,value.Length);
+            int k = rnd.Next(value.Length);
             return value[k];
         }
+
+        public static int Value(int number)
+        {
+            return rnd.Next(number);
+        }
+
     }
 }

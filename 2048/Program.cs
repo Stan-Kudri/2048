@@ -7,39 +7,25 @@ using System.Threading.Tasks;
 
 namespace _2048
 {
-    //Цифры сделаны под стрелки вверх(1) вправо(2) вниз(3) влево(4)
-    
 
     class Program
     {
         static void Main(string[] args)
         {
             int size = 4;
-            var field = new NewField(size);
-            for (int i = 0; i < size; i++)
-            {
-                for (int j = 0; j < size; j++)
-                    Console.Write(field[i, j]+" ");
-                Console.WriteLine();
-            }
-            Console.WriteLine();
+            var field = new Field(size);
+            field.Conclusion();
             do
             {
                 ConsoleKeyInfo key = Console.ReadKey(true);
                 field.Movement(key);
-                if (!field.RandomCellForNumber())
-                    field.FreeCellRecording();
-                for (int i = 0; i < size; i++)
-                {
-                    for (int j = 0; j < size; j++)
-                        Console.Write(field[i, j] + " ");
-                    Console.WriteLine();
-                }
-                Console.WriteLine();
+                if (!field.RandomCellFilling())
+                    field.CellFilling();
+                field.Conclusion();
 
             }
-            while (field.FreeCellCheck());
-
+            while (field.CellCheck());
+            Console.WriteLine("Игра окончена!");
             Console.ReadKey();
         }
     }
