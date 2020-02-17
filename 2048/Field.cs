@@ -13,7 +13,7 @@ namespace _2048
         private int[] valuetiles = new int[] { 2, 4 };
 
         public int Column { get => items.GetLength(1); }
-        public int Line { get => items.GetLength(0); }
+        public int Row { get => items.GetLength(0); }
 
         public int[] ValueTiles { get => valuetiles; set => valuetiles = value; }
 
@@ -31,7 +31,7 @@ namespace _2048
 
         public void Conclusion()
         {
-            for (int i = 0; i < Line; i++)
+            for (int i = 0; i < Row; i++)
             {
                 for (int j = 0; j < Column; j++)
                     Console.Write(items[i, j] + " ");
@@ -46,23 +46,13 @@ namespace _2048
             for (int i = 0; i < size; i++)
                 items[RandomValue.Value(size), RandomValue.Value(size)] = RandomValue.Tile(this.valuetiles);
         }
-
-
-        public bool CellCheck()
-        {
-            for (int i = 0; i < Line; i++)
-                for (int j = 0; j < Column; j++)
-                    if (items[i, j] == 0)
-                        return true;
-            return false;
-        }
-
+        
         public void CellFilling()
         {
             var list = new EmptyTile();
             list.Tile(items);
             var point = list.RandomEmptyCell();
-            items[point.Line, point.Column] = RandomValue.Tile(this.valuetiles);
+            items[point.Row, point.Column] = RandomValue.Tile(this.valuetiles);
         }
 
 
@@ -70,14 +60,27 @@ namespace _2048
         {
             for (int i = 0; i < 4; i++)
             {
-                int line = RandomValue.Value(Line);
+                int row = RandomValue.Value(Row);
                 int column = RandomValue.Value(Column);
-                if (items[line, column] == 0)
+                if (items[row, column] == 0)
                 {
-                    items[line, column] = RandomValue.Tile(this.valuetiles);
+                    items[row, column] = RandomValue.Tile(this.valuetiles);
                     return true;
                 }
             }
+            return false;
+        }
+        
+        public bool GameCheck()
+        {
+            for(int i = 0; i < Row; i++)
+                for(int j = 0; j < Column; j++)
+                {
+                    if ((j + 1 != Column) && (items[i, j] == items[i, j + 1]))
+                        return true;
+                    if ((i + 1 != Row) && (items[i, j] == items[i + 1, j]))
+                        return true;
+                }
             return false;
         }
 
@@ -87,8 +90,8 @@ namespace _2048
             {
                 case ConsoleKey.UpArrow:
                     for (int i = 0; i < Column; i++)
-                        for (int j = 0; j < Line; j++)
-                            for (int k = j + 1; k < Line; k++)
+                        for (int j = 0; j < Row; j++)
+                            for (int k = j + 1; k < Row; k++)
                             {
                                 if ((items[k, i] != 0))
                                 {
@@ -111,7 +114,7 @@ namespace _2048
                     break;
 
                 case ConsoleKey.RightArrow:
-                    for (int i = 0; i < Line; i++)
+                    for (int i = 0; i < Row; i++)
                         for (int j = Column - 1; j >= 0; j--)
                             for (int k = j - 1; k >= 0; k--)
                             {
@@ -137,7 +140,7 @@ namespace _2048
 
                 case ConsoleKey.DownArrow:
                     for (int i = 0; i < Column; i++)
-                        for (int j = Line - 1; j >= 0; j--)
+                        for (int j = Row - 1; j >= 0; j--)
                             for (int k = j - 1; k >= 0; k--)
                             {
                                 if ((items[k, i] != 0))
@@ -160,7 +163,7 @@ namespace _2048
                             }
                     break;
                 case ConsoleKey.LeftArrow:
-                    for (int i = 0; i < Line; i++)
+                    for (int i = 0; i < Row; i++)
                         for (int j = 0; j < Column; j++)
                             for (int k = j + 1; k < Column; k++)
                             {

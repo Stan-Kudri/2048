@@ -8,13 +8,13 @@ namespace _2048
 {
     public class Point
     {
-        public int Line { get; set; }
+        public int Row { get; set; }
         public int Column { get; set; }
 
         
-        public Point(int line, int column)
+        public Point(int row, int column)
         {
-            Line = line;
+            Row = row;
             Column = column;
         }
     }
@@ -31,9 +31,9 @@ namespace _2048
                         this.Add(i, j);
         }
 
-        public void Add(int line, int column)
+        public void Add(int row, int column)
         {
-            list.Add(new Point(line, column));
+            list.Add(new Point(row, column));
         }
 
         public Point RandomEmptyCell()

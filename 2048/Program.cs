@@ -24,7 +24,7 @@ namespace _2048
                 field.Conclusion();
 
             }
-            while (field.CellCheck());
+            while (field.GameCheck());
             Console.WriteLine("Игра окончена!");
             Console.ReadKey();
         }
