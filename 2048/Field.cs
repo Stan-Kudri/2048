@@ -13,7 +13,7 @@ namespace _2048
         private int[] valuetiles = new int[] { 2, 4 };
 
         public int Column { get => items.GetLength(1); }
-        public int Row { get => items.GetLength(0); }
+        public int Row { get => items.GetLength(0); }        
 
         public int[] ValueTiles { get => valuetiles; set => valuetiles = value; }
 
@@ -27,19 +27,8 @@ namespace _2048
             {
                 items[i, j] = value;
             }
-        }
-
-        public void Conclusion()
-        {
-            for (int i = 0; i < Row; i++)
-            {
-                for (int j = 0; j < Column; j++)
-                    Console.Write(items[i, j] + " ");
-                Console.WriteLine();
-            }
-            Console.WriteLine();
-        }
-
+        }              
+        
         public Field(int size)
         {
             items = new int[size, size];
@@ -54,8 +43,7 @@ namespace _2048
             var point = list.RandomEmptyCell();
             items[point.Row, point.Column] = RandomValue.Tile(this.valuetiles);
         }
-
-
+               
         public bool RandomCellFilling()
         {
             for (int i = 0; i < 4; i++)
@@ -76,16 +64,19 @@ namespace _2048
             for(int i = 0; i < Row; i++)
                 for(int j = 0; j < Column; j++)
                 {
-                    if ((j + 1 != Column) && (items[i, j] == items[i, j + 1]))
+                    if ( (j + 1 != Column) && (items[i, j] == items[i, j + 1])  )
                         return true;
-                    if ((i + 1 != Row) && (items[i, j] == items[i + 1, j]))
+                    if ( (i + 1 != Row) && (items[i, j] == items[i + 1, j]))
+                        return true;
+                    if (items[i, j] == 0)
                         return true;
                 }
             return false;
         }
 
-        public void Movement(ConsoleKeyInfo key)
+        public bool Movement(ConsoleKeyInfo key)
         {
+            var check = false;
             switch (key.Key)
             {
                 case ConsoleKey.UpArrow:
@@ -99,6 +90,7 @@ namespace _2048
                                     {
                                         items[j, i] = items[k, i];
                                         items[k, i] = 0;
+                                        check = true;
                                     }
                                     else
                                     {
@@ -106,6 +98,7 @@ namespace _2048
                                         {
                                             items[j, i] *= 2;
                                             items[k, i] = 0;
+                                            check = true;
                                         }
                                         break;
                                     }
@@ -124,6 +117,7 @@ namespace _2048
                                     {
                                         items[i, j] = items[i, k];
                                         items[i, k] = 0;
+                                        check = true;
                                     }
                                     else
                                     {
@@ -131,6 +125,7 @@ namespace _2048
                                         {
                                             items[i, j] *= 2;
                                             items[i, k] = 0;
+                                            check = true;
                                         }
                                         break;
                                     }
@@ -149,6 +144,7 @@ namespace _2048
                                     {
                                         items[j, i] = items[k, i];
                                         items[k, i] = 0;
+                                        check = true;
                                     }
                                     else
                                     {
@@ -156,12 +152,14 @@ namespace _2048
                                         {
                                             items[j, i] *= 2;
                                             items[k, i] = 0;
+                                            check = true;
                                         }
                                         break;
                                     }
                                 }
                             }
                     break;
+
                 case ConsoleKey.LeftArrow:
                     for (int i = 0; i < Row; i++)
                         for (int j = 0; j < Column; j++)
@@ -173,6 +171,7 @@ namespace _2048
                                     {
                                         items[i, j] = items[i, k];
                                         items[i, k] = 0;
+                                        check = true;
                                     }
                                     else
                                     {
@@ -180,6 +179,7 @@ namespace _2048
                                         {
                                             items[i, j] *= 2;
                                             items[i, k] = 0;
+                                            check = true;
                                         }
                                         break;
                                     }
@@ -187,6 +187,7 @@ namespace _2048
                             }
                     break;
             }
+            return check;
         }
 
     }
