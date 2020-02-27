@@ -43,12 +43,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ColorPrintingDigit.cs" />
     <Compile Include="EmptyTile.cs" />
-    <Compile Include="Enum.cs" />
     <Compile Include="Field.cs" />
+    <Compile Include="RandomGenerator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Random\RandomValue.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

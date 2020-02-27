@@ -19,11 +19,11 @@ namespace _2048
         }
     }
 
-    class EmptyTile
+    class FreeCell
     {        
         private List<Point> list = new List<Point>();
 
-        public void Tile(int [,] items)
+        public void Cell(int [,] items)
         {
             for (int i = 0; i < items.GetLength(0); i++)
                 for (int j = 0; j < items.GetLength(1); j++)
@@ -31,7 +31,7 @@ namespace _2048
                         this.Add(i, j);
         }
 
-        public void Add(int row, int column)
+        private void Add(int row, int column)
         {
             list.Add(new Point(row, column));
         }
@@ -39,7 +39,7 @@ namespace _2048
         public Point RandomEmptyCell()
         {
             int number = list.Count;
-            number = RandomValue.Value(number);
+            number = Field.Value(number);
             return list[number];
         }
     }

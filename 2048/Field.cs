@@ -9,68 +9,82 @@ namespace _2048
 {
     public class Field
     {
-        private int[,] items;
-        private int[] valuetiles = new int[] { 2, 4 };
+        private int[,] _items;
 
-        public int Column { get => items.GetLength(1); }
-        public int Row { get => items.GetLength(0); }        
+        public int Column { get => _items.GetLength(1); }
+        public int Row { get => _items.GetLength(0); }
 
-        public int[] ValueTiles { get => valuetiles; set => valuetiles = value; }
+        private static Random rnd = new Random();
 
+        public static int Value(int number)
+        {
+            return rnd.Next(number);
+        }
+
+        private RandomGenerator _randomGenerator; 
+        
         public int this[int i, int j]
         {
             get
             {
-                return items[i, j];
+                return _items[i, j];
             }
             set
             {
-                items[i, j] = value;
+                _items[i, j] = value;
             }
         }              
         
-        public Field(int size)
+        public Field(int size, RandomGenerator generator)
         {
-            items = new int[size, size];
-            for (int i = 0; i < size; i++)
-                items[RandomValue.Value(size), RandomValue.Value(size)] = RandomValue.Tile(this.valuetiles);
+            _randomGenerator = generator;
+            var filledCells = 2;
+            _items = new int[size, size];
+            for (int i = 0; i < filledCells; i++)
+                _items[Value(size), Value(size)] = _randomGenerator.RandomValue();
         }
         
-        public void CellFilling()
+        public void FillingTheEmptyCellValue()
         {
-            var list = new EmptyTile();
-            list.Tile(items);
+            var list = new FreeCell();
+            list.Cell(_items);
             var point = list.RandomEmptyCell();
-            items[point.Row, point.Column] = RandomValue.Tile(this.valuetiles);
+            _items[point.Row, point.Column] = _randomGenerator.RandomValue();
         }
                
-        public bool RandomCellFilling()
+        public void FillingRandomValueCell()
         {
-            for (int i = 0; i < 4; i++)
+            var maxTry = 4;
+            bool check = false;
+            for (int i = 0; i < maxTry; i++)
             {
-                int row = RandomValue.Value(Row);
-                int column = RandomValue.Value(Column);
-                if (items[row, column] == 0)
+                int row = Value(Row);
+                int column = Value(Column);
+                if (_items[row, column] == 0)
                 {
-                    items[row, column] = RandomValue.Tile(this.valuetiles);
-                    return true;
+                    _items[row, column] = _randomGenerator.RandomValue();
+                    check = true;
+                    break;
                 }
             }
-            return false;
+            if(!check)
+                FillingTheEmptyCellValue();
         }
         
         public bool GameCheck()
         {
             for(int i = 0; i < Row; i++)
-                for(int j = 0; j < Column; j++)
+            {
+                for (int j = 0; j < Column; j++)
                 {
-                    if ( (j + 1 != Column) && (items[i, j] == items[i, j + 1])  )
+                    if ((j + 1 != Column) && (_items[i, j] == _items[i, j + 1]))
                         return true;
-                    if ( (i + 1 != Row) && (items[i, j] == items[i + 1, j]))
+                    if ((i + 1 != Row) && (_items[i, j] == _items[i + 1, j]))
                         return true;
-                    if (items[i, j] == 0)
+                    if (_items[i, j] == 0)
                         return true;
                 }
+            }                
             return false;
         }
 
@@ -78,26 +92,26 @@ namespace _2048
         {
             var check = false;
             switch (key.Key)
-            {
+            {                
                 case ConsoleKey.UpArrow:
                     for (int i = 0; i < Column; i++)
                         for (int j = 0; j < Row; j++)
                             for (int k = j + 1; k < Row; k++)
                             {
-                                if ((items[k, i] != 0))
+                                if ((_items[k, i] != 0))
                                 {
-                                    if (items[j, i] == 0)
+                                    if (_items[j, i] == 0)
                                     {
-                                        items[j, i] = items[k, i];
-                                        items[k, i] = 0;
+                                        _items[j, i] = _items[k, i];
+                                        _items[k, i] = 0;
                                         check = true;
                                     }
                                     else
                                     {
-                                        if (items[j, i] == items[k, i])
+                                        if (_items[j, i] == _items[k, i])
                                         {
-                                            items[j, i] *= 2;
-                                            items[k, i] = 0;
+                                            _items[j, i] *= 2;
+                                            _items[k, i] = 0;
                                             check = true;
                                         }
                                         break;
@@ -111,20 +125,20 @@ namespace _2048
                         for (int j = Column - 1; j >= 0; j--)
                             for (int k = j - 1; k >= 0; k--)
                             {
-                                if ((items[i, k] != 0))
+                                if ((_items[i, k] != 0))
                                 {
-                                    if (items[i, j] == 0)
+                                    if (_items[i, j] == 0)
                                     {
-                                        items[i, j] = items[i, k];
-                                        items[i, k] = 0;
+                                        _items[i, j] = _items[i, k];
+                                        _items[i, k] = 0;
                                         check = true;
                                     }
                                     else
                                     {
-                                        if (items[i, j] == items[i, k])
+                                        if (_items[i, j] == _items[i, k])
                                         {
-                                            items[i, j] *= 2;
-                                            items[i, k] = 0;
+                                            _items[i, j] *= 2;
+                                            _items[i, k] = 0;
                                             check = true;
                                         }
                                         break;
@@ -138,20 +152,20 @@ namespace _2048
                         for (int j = Row - 1; j >= 0; j--)
                             for (int k = j - 1; k >= 0; k--)
                             {
-                                if ((items[k, i] != 0))
+                                if ((_items[k, i] != 0))
                                 {
-                                    if (items[j, i] == 0)
+                                    if (_items[j, i] == 0)
                                     {
-                                        items[j, i] = items[k, i];
-                                        items[k, i] = 0;
+                                        _items[j, i] = _items[k, i];
+                                        _items[k, i] = 0;
                                         check = true;
                                     }
                                     else
                                     {
-                                        if (items[j, i] == items[k, i])
+                                        if (_items[j, i] == _items[k, i])
                                         {
-                                            items[j, i] *= 2;
-                                            items[k, i] = 0;
+                                            _items[j, i] *= 2;
+                                            _items[k, i] = 0;
                                             check = true;
                                         }
                                         break;
@@ -165,20 +179,20 @@ namespace _2048
                         for (int j = 0; j < Column; j++)
                             for (int k = j + 1; k < Column; k++)
                             {
-                                if ((items[i, k] != 0))
+                                if ((_items[i, k] != 0))
                                 {
-                                    if (items[i, j] == 0)
+                                    if (_items[i, j] == 0)
                                     {
-                                        items[i, j] = items[i, k];
-                                        items[i, k] = 0;
+                                        _items[i, j] = _items[i, k];
+                                        _items[i, k] = 0;
                                         check = true;
                                     }
                                     else
                                     {
-                                        if (items[i, j] == items[i, k])
+                                        if (_items[i, j] == _items[i, k])
                                         {
-                                            items[i, j] *= 2;
-                                            items[i, k] = 0;
+                                            _items[i, j] *= 2;
+                                            _items[i, k] = 0;
                                             check = true;
                                         }
                                         break;
