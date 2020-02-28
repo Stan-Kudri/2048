@@ -26,7 +26,7 @@ namespace _2048
 
         public int RandomValue()
         {
-            var currentRandomProbability = _rnd.NextDouble() * SumProbability();
+            var currentRandomProbability = _rnd.NextDouble() * _entities.Sum(s=>s.Probability);
             var probability = 0.0;
             foreach (var entity in _entities)
             {
@@ -35,14 +35,6 @@ namespace _2048
                     return entity.Value;
             }
             return 0;
-        }
-
-        private double SumProbability()
-        {
-            var p = 0.0;
-            foreach (var e in _entities)
-                p += e.Probability;
-            return p;
         }
 
         class EntityComparer : IComparer<Entity>

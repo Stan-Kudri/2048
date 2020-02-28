@@ -13,13 +13,8 @@ namespace _2048
 
         public int Column { get => _items.GetLength(1); }
         public int Row { get => _items.GetLength(0); }
-
-        private static Random rnd = new Random();
-
-        public static int Value(int number)
-        {
-            return rnd.Next(number);
-        }
+        
+        private Random _rnd = new Random();
 
         private RandomGenerator _randomGenerator; 
         
@@ -41,7 +36,7 @@ namespace _2048
             var filledCells = 2;
             _items = new int[size, size];
             for (int i = 0; i < filledCells; i++)
-                _items[Value(size), Value(size)] = _randomGenerator.RandomValue();
+                _items[_rnd.Next(size), _rnd.Next(size)] = _randomGenerator.RandomValue();
         }
         
         public void FillingTheEmptyCellValue()
@@ -52,14 +47,14 @@ namespace _2048
             _items[point.Row, point.Column] = _randomGenerator.RandomValue();
         }
                
-        public void FillingRandomValueCell()
+        public void FillOneOfTheRandomCells()
         {
             var maxTry = 4;
             bool check = false;
             for (int i = 0; i < maxTry; i++)
             {
-                int row = Value(Row);
-                int column = Value(Column);
+                int row = _rnd.Next(Row);
+                int column = _rnd.Next(Column);
                 if (_items[row, column] == 0)
                 {
                     _items[row, column] = _randomGenerator.RandomValue();

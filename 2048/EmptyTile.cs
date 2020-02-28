@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using _2048;
 
 namespace _2048
 {
@@ -39,7 +40,7 @@ namespace _2048
         public Point RandomEmptyCell()
         {
             int number = list.Count;
-            number = Field.Value(number);
+            number = (new Random()).Next(number);
             return list[number];
         }
     }

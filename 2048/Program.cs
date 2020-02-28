@@ -27,7 +27,7 @@ namespace _2048
                 }
                 if (field.Movement(key))
                 {
-                    field.FillingRandomValueCell();
+                    field.FillOneOfTheRandomCells();
                     Console.Clear();
                     ColorPrintingDigit.Print(field);
                 }                                    
