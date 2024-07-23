@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using static _2048.Model.Entities.RandomGenerator;
 
 namespace _2048
 {
-    public class RandomGenerator
+    public partial class RandomGenerator
     {
-        private List<Entity> _entities;
-        private Random _rnd;
+        private readonly List<Entity> _entities;
+        private readonly Random _rnd;
 
         public RandomGenerator()
         {
@@ -26,41 +25,18 @@ namespace _2048
 
         public int RandomValue()
         {
-            var currentRandomProbability = _rnd.NextDouble() * _entities.Sum(s=>s.Probability);
+            var currentRandomProbability = _rnd.NextDouble() * _entities.Sum(s => s.Probability);
             var probability = 0.0;
             foreach (var entity in _entities)
             {
                 probability += entity.Probability;
                 if (probability >= currentRandomProbability)
+                {
                     return entity.Value;
+                }
             }
+
             return 0;
         }
-
-        class EntityComparer : IComparer<Entity>
-        {
-            public int Compare(Entity x, Entity y)
-            {
-                var xProbability = x.Probability;
-                var yProbability = y.Probability;
-                return xProbability.CompareTo(yProbability);
-            }
-        }
-
-        class Entity
-        {
-            public double Probability { get; }
-            public int Value { get; }
-
-            public Entity(double probability, int value)
-            {
-                Probability = probability;
-                Value = value;
-            }
-        }
     }
-
-    
-
-    
 }

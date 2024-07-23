@@ -1,35 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 
-namespace _2048
+namespace _2048.Model
 {
     public class Field
     {
-        private int[,] _items;
+        private readonly int[,] _items;
 
         public int Column { get => _items.GetLength(1); }
         public int Row { get => _items.GetLength(0); }
-        
+
         private Random _rnd = new Random();
 
-        private RandomGenerator _randomGenerator; 
-        
+        private RandomGenerator _randomGenerator;
+
         public int this[int i, int j]
         {
-            get
-            {
-                return _items[i, j];
-            }
-            set
-            {
-                _items[i, j] = value;
-            }
-        }              
-        
+            get => _items[i, j];
+            set => _items[i, j] = value;
+        }
+
         public Field(int size, RandomGenerator generator)
         {
             _randomGenerator = generator;
@@ -38,7 +28,7 @@ namespace _2048
             for (int i = 0; i < filledCells; i++)
                 _items[_rnd.Next(size), _rnd.Next(size)] = _randomGenerator.RandomValue();
         }
-        
+
         public void FillingTheEmptyCellValue()
         {
             var list = new FreeCell();
@@ -46,7 +36,7 @@ namespace _2048
             var point = list.RandomEmptyCell();
             _items[point.Row, point.Column] = _randomGenerator.RandomValue();
         }
-               
+
         public void FillOneOfTheRandomCells()
         {
             var maxTry = 4;
@@ -62,24 +52,24 @@ namespace _2048
                     break;
                 }
             }
-            if(!check)
+            if (!check)
                 FillingTheEmptyCellValue();
         }
-        
+
         public bool GameCheck()
         {
-            for(int i = 0; i < Row; i++)
+            for (int i = 0; i < Row; i++)
             {
                 for (int j = 0; j < Column; j++)
                 {
-                    if ((j + 1 != Column) && (_items[i, j] == _items[i, j + 1]))
+                    if ((j + 1 != Column) && (_items[i, j] == _items[i, j + 1])
+                        || (i + 1 != Row) && (_items[i, j] == _items[i + 1, j])
+                        || _items[i, j] == 0)
+                    {
                         return true;
-                    if ((i + 1 != Row) && (_items[i, j] == _items[i + 1, j]))
-                        return true;
-                    if (_items[i, j] == 0)
-                        return true;
+                    }
                 }
-            }                
+            }
             return false;
         }
 
@@ -87,7 +77,7 @@ namespace _2048
         {
             var check = false;
             switch (key.Key)
-            {                
+            {
                 case ConsoleKey.UpArrow:
                     for (int i = 0; i < Column; i++)
                         for (int j = 0; j < Row; j++)

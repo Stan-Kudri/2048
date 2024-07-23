@@ -1,14 +1,11 @@
 ﻿
+using _2048.Model;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace _2048
 {
     class Program
-    {        
+    {
         static void Main(string[] args)
         {
             int size = 4;
@@ -20,8 +17,8 @@ namespace _2048
             ColorPrintingDigit.Print(field);
             do
             {
-                ConsoleKeyInfo key = Console.ReadKey(true); 
-                if(key.Key == ConsoleKey.Escape)
+                ConsoleKeyInfo key = Console.ReadKey(true);
+                if (key.Key == ConsoleKey.Escape)
                 {
                     return;
                 }
@@ -30,7 +27,7 @@ namespace _2048
                     field.FillOneOfTheRandomCells();
                     Console.Clear();
                     ColorPrintingDigit.Print(field);
-                }                                    
+                }
             }
             while (field.GameCheck());
             Console.WriteLine("Игра окончена!");
