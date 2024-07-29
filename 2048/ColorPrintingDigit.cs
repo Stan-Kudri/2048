@@ -14,8 +14,10 @@ namespace _2048
                     PrintDigit(field[i, j]);
                     Console.Write("\t");
                 }
+
                 Console.WriteLine();
             }
+
             Console.WriteLine();
         }
 

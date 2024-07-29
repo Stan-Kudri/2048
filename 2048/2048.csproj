@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ColorPrintingDigit.cs" />
+    <Compile Include="Extension\RandomValueFromListExtension.cs" />
     <Compile Include="FreeCell.cs" />
     <Compile Include="Model\Entities\EntityComparer.cs" />
     <Compile Include="Model\Entities\Entity.cs" />

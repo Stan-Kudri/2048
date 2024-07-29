@@ -7,14 +7,8 @@ namespace _2048
 {
     public partial class RandomGenerator
     {
-        private readonly List<Entity> _entities;
-        private readonly Random _rnd;
-
-        public RandomGenerator()
-        {
-            _entities = new List<Entity>();
-            _rnd = new Random();
-        }
+        private readonly List<Entity> _entities = new List<Entity>();
+        private readonly Random _rnd = new Random();
 
         public RandomGenerator Add(int value, double probability)
         {

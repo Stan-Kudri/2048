@@ -5,14 +5,14 @@ namespace _2048.Model
 {
     public class Field
     {
+        private const int FieldCells = 2;
+        private const int RandomCellFillAttempts = 4;
+
         private readonly int[,] _items;
 
-        public int Column { get => _items.GetLength(1); }
-        public int Row { get => _items.GetLength(0); }
+        private readonly Random _rnd = new Random();
 
-        private Random _rnd = new Random();
-
-        private RandomGenerator _randomGenerator;
+        private readonly RandomGenerator _randomGenerator;
 
         public int this[int i, int j]
         {
@@ -23,11 +23,16 @@ namespace _2048.Model
         public Field(int size, RandomGenerator generator)
         {
             _randomGenerator = generator;
-            var filledCells = 2;
             _items = new int[size, size];
-            for (int i = 0; i < filledCells; i++)
+            for (var i = 0; i < FieldCells; i++)
+            {
                 _items[_rnd.Next(size), _rnd.Next(size)] = _randomGenerator.RandomValue();
+            }
         }
+
+        public int Column => _items.GetLength(1);
+
+        public int Row => _items.GetLength(0);
 
         public void FillingTheEmptyCellValue()
         {
@@ -39,37 +44,34 @@ namespace _2048.Model
 
         public void FillOneOfTheRandomCells()
         {
-            var maxTry = 4;
-            bool check = false;
-            for (int i = 0; i < maxTry; i++)
+            for (int i = 0; i < RandomCellFillAttempts; i++)
             {
-                int row = _rnd.Next(Row);
-                int column = _rnd.Next(Column);
+                var row = _rnd.Next(Row);
+                var column = _rnd.Next(Column);
+
                 if (_items[row, column] == 0)
                 {
                     _items[row, column] = _randomGenerator.RandomValue();
-                    check = true;
-                    break;
+                    return;
                 }
             }
-            if (!check)
-                FillingTheEmptyCellValue();
+
+            FillingTheEmptyCellValue();
         }
 
         public bool GameCheck()
         {
-            for (int i = 0; i < Row; i++)
+            for (var i = 0; i < Row; i++)
             {
-                for (int j = 0; j < Column; j++)
+                for (var j = 0; j < Column; j++)
                 {
-                    if ((j + 1 != Column) && (_items[i, j] == _items[i, j + 1])
-                        || (i + 1 != Row) && (_items[i, j] == _items[i + 1, j])
-                        || _items[i, j] == 0)
+                    if (TryAddingCellValues(i, j) || _items[i, j] == 0)
                     {
                         return true;
                     }
                 }
             }
+
             return false;
         }
 
@@ -79,11 +81,38 @@ namespace _2048.Model
             switch (key.Key)
             {
                 case ConsoleKey.UpArrow:
-                    for (int i = 0; i < Column; i++)
-                        for (int j = 0; j < Row; j++)
-                            for (int k = j + 1; k < Row; k++)
+                    for (var i = 0; i < Column; i++)
+                        for (var j = 0; j < Row; j++)
+                            for (var k = j + 1; k < Row; k++)
                             {
-                                if ((_items[k, i] != 0))
+                                if (_items[k, i] != 0)
+                                {
+                                    if (_items[j, i] == 0)
+                                    {
+                                        _items[j, i] = _items[k, i];
+                                        _items[k, i] = 0;
+                                        check = true;
+                                    }
+                                    else
+                                    {
+                                        if (_items[j, i] == _items[k, i])
+                                        {
+                                            _items[j, i] *= 2;
+                                            _items[k, i] = 0;
+                                            check = true;
+                                        }
+                                        break;
+                                    }
+                                }
+                            }
+                    break;
+
+                case ConsoleKey.DownArrow:
+                    for (var i = 0; i < Column; i++)
+                        for (var j = Row - 1; j >= 0; j--)
+                            for (var k = j - 1; k >= 0; k--)
+                            {
+                                if (_items[k, i] != 0)
                                 {
                                     if (_items[j, i] == 0)
                                     {
@@ -106,11 +135,11 @@ namespace _2048.Model
                     break;
 
                 case ConsoleKey.RightArrow:
-                    for (int i = 0; i < Row; i++)
-                        for (int j = Column - 1; j >= 0; j--)
-                            for (int k = j - 1; k >= 0; k--)
+                    for (var i = 0; i < Row; i++)
+                        for (var j = Column - 1; j >= 0; j--)
+                            for (var k = j - 1; k >= 0; k--)
                             {
-                                if ((_items[i, k] != 0))
+                                if (_items[i, k] != 0)
                                 {
                                     if (_items[i, j] == 0)
                                     {
@@ -132,39 +161,12 @@ namespace _2048.Model
                             }
                     break;
 
-                case ConsoleKey.DownArrow:
-                    for (int i = 0; i < Column; i++)
-                        for (int j = Row - 1; j >= 0; j--)
-                            for (int k = j - 1; k >= 0; k--)
-                            {
-                                if ((_items[k, i] != 0))
-                                {
-                                    if (_items[j, i] == 0)
-                                    {
-                                        _items[j, i] = _items[k, i];
-                                        _items[k, i] = 0;
-                                        check = true;
-                                    }
-                                    else
-                                    {
-                                        if (_items[j, i] == _items[k, i])
-                                        {
-                                            _items[j, i] *= 2;
-                                            _items[k, i] = 0;
-                                            check = true;
-                                        }
-                                        break;
-                                    }
-                                }
-                            }
-                    break;
-
                 case ConsoleKey.LeftArrow:
-                    for (int i = 0; i < Row; i++)
-                        for (int j = 0; j < Column; j++)
-                            for (int k = j + 1; k < Column; k++)
+                    for (var i = 0; i < Row; i++)
+                        for (var j = 0; j < Column; j++)
+                            for (var k = j + 1; k < Column; k++)
                             {
-                                if ((_items[i, k] != 0))
+                                if (_items[i, k] != 0)
                                 {
                                     if (_items[i, j] == 0)
                                     {
@@ -189,5 +191,19 @@ namespace _2048.Model
             return check;
         }
 
+        private bool TryAddingCellValues(int row, int column)
+        {
+            if (column + 1 != Column && _items[row, column] == _items[row, column + 1])
+            {
+                return true;
+            }
+
+            if (row + 1 != Row && _items[row, column] == _items[row + 1, column])
+            {
+                return true;
+            }
+
+            return false;
+        }
     }
 }

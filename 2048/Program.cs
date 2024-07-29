@@ -10,9 +10,7 @@ namespace _2048
         {
             int size = 4;
             var valuetiles = new RandomGenerator();
-            valuetiles.
-                Add(2, 90).
-                Add(4, 10);
+            valuetiles.Add(2, 90).Add(4, 10);
             var field = new Field(size, valuetiles);
             ColorPrintingDigit.Print(field);
             do
@@ -22,6 +20,7 @@ namespace _2048
                 {
                     return;
                 }
+
                 if (field.Movement(key))
                 {
                     field.FillOneOfTheRandomCells();
@@ -30,6 +29,7 @@ namespace _2048
                 }
             }
             while (field.GameCheck());
+
             Console.WriteLine("Игра окончена!");
             Console.ReadKey();
         }

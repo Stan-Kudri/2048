@@ -4,16 +4,18 @@
     {
         public class Entity
         {
+            private readonly double _probability;
+            private readonly int _value;
+
             public Entity(double probability, int value)
             {
-                Probability = probability;
-                Value = value;
+                _probability = probability;
+                _value = value;
             }
 
-            public double Probability { get; }
+            public double Probability => _probability;
 
-            public int Value { get; }
-
+            public int Value => _value;
         }
     }
 
