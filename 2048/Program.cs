@@ -26,11 +26,13 @@ namespace _2048
                     field.FillOneOfTheRandomCells();
                     Console.Clear();
                     ColorPrintingDigit.Print(field);
+                    Console.WriteLine($"Очки:{field.Points()}");
                 }
             }
             while (field.GameCheck());
 
             Console.WriteLine("Игра окончена!");
+            Console.WriteLine($"Очки:{field.Points()}");
             Console.ReadKey();
         }
     }

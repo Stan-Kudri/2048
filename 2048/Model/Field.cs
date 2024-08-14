@@ -34,6 +34,17 @@ namespace _2048.Model
 
         public int Row => _items.GetLength(0);
 
+        public double Points()
+        {
+            var summ = 0;
+            foreach (var item in _items)
+            {
+                summ += item;
+            }
+
+            return summ;
+        }
+
         public void FillingTheEmptyCellValue()
         {
             var list = new FreeCell();
