@@ -1,4 +1,5 @@
-﻿using System;
+﻿using _2048.Extension;
+using System;
 
 
 namespace _2048.Model
@@ -45,14 +46,6 @@ namespace _2048.Model
             return summ;
         }
 
-        public void FillingTheEmptyCellValue()
-        {
-            var list = new FreeCell();
-            list.Cell(_items);
-            var point = list.RandomEmptyCell();
-            _items[point.Row, point.Column] = _randomGenerator.RandomValue();
-        }
-
         public void FillOneOfTheRandomCells()
         {
             for (int i = 0; i < RandomCellFillAttempts; i++)
@@ -88,118 +81,72 @@ namespace _2048.Model
 
         public bool Movement(ConsoleKeyInfo key)
         {
-            var check = false;
+            var isMoveField = false;
+
             switch (key.Key)
             {
                 case ConsoleKey.UpArrow:
                     for (var i = 0; i < Column; i++)
+                    {
                         for (var j = 0; j < Row; j++)
+                        {
                             for (var k = j + 1; k < Row; k++)
                             {
-                                if (_items[k, i] != 0)
-                                {
-                                    if (_items[j, i] == 0)
-                                    {
-                                        _items[j, i] = _items[k, i];
-                                        _items[k, i] = 0;
-                                        check = true;
-                                    }
-                                    else
-                                    {
-                                        if (_items[j, i] == _items[k, i])
-                                        {
-                                            _items[j, i] *= 2;
-                                            _items[k, i] = 0;
-                                            check = true;
-                                        }
-                                        break;
-                                    }
-                                }
+                                _items.MovedUpOrDownItems(i, j, k, ref isMoveField);
                             }
+                        }
+                    }
                     break;
 
                 case ConsoleKey.DownArrow:
                     for (var i = 0; i < Column; i++)
+                    {
                         for (var j = Row - 1; j >= 0; j--)
+                        {
                             for (var k = j - 1; k >= 0; k--)
                             {
-                                if (_items[k, i] != 0)
-                                {
-                                    if (_items[j, i] == 0)
-                                    {
-                                        _items[j, i] = _items[k, i];
-                                        _items[k, i] = 0;
-                                        check = true;
-                                    }
-                                    else
-                                    {
-                                        if (_items[j, i] == _items[k, i])
-                                        {
-                                            _items[j, i] *= 2;
-                                            _items[k, i] = 0;
-                                            check = true;
-                                        }
-                                        break;
-                                    }
-                                }
+                                _items.MovedUpOrDownItems(i, j, k, ref isMoveField);
                             }
+                        }
+                    }
                     break;
 
                 case ConsoleKey.RightArrow:
                     for (var i = 0; i < Row; i++)
+                    {
                         for (var j = Column - 1; j >= 0; j--)
+                        {
                             for (var k = j - 1; k >= 0; k--)
                             {
-                                if (_items[i, k] != 0)
-                                {
-                                    if (_items[i, j] == 0)
-                                    {
-                                        _items[i, j] = _items[i, k];
-                                        _items[i, k] = 0;
-                                        check = true;
-                                    }
-                                    else
-                                    {
-                                        if (_items[i, j] == _items[i, k])
-                                        {
-                                            _items[i, j] *= 2;
-                                            _items[i, k] = 0;
-                                            check = true;
-                                        }
-                                        break;
-                                    }
-                                }
+                                _items.MovedRightOrLeftItems(i, j, k, ref isMoveField);
                             }
+                        }
+                    }
                     break;
 
                 case ConsoleKey.LeftArrow:
                     for (var i = 0; i < Row; i++)
+                    {
                         for (var j = 0; j < Column; j++)
+                        {
                             for (var k = j + 1; k < Column; k++)
                             {
-                                if (_items[i, k] != 0)
-                                {
-                                    if (_items[i, j] == 0)
-                                    {
-                                        _items[i, j] = _items[i, k];
-                                        _items[i, k] = 0;
-                                        check = true;
-                                    }
-                                    else
-                                    {
-                                        if (_items[i, j] == _items[i, k])
-                                        {
-                                            _items[i, j] *= 2;
-                                            _items[i, k] = 0;
-                                            check = true;
-                                        }
-                                        break;
-                                    }
-                                }
+                                _items.MovedRightOrLeftItems(i, j, k, ref isMoveField);
                             }
+                        }
+                    }
                     break;
             }
-            return check;
+
+            return isMoveField;
+        }
+
+        private void FillingTheEmptyCellValue()
+        {
+            var list = new FreeCell();
+            list.Cell(_items);
+            var point = list.RandomEmptyCell();
+            _items[point.Row, point.Column] = _randomGenerator.RandomValue();
         }
 
         private bool TryAddingCellValues(int row, int column)

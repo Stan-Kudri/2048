@@ -2,14 +2,17 @@
 {
     public class Point
     {
+        private readonly int _row;
+        private readonly int _column;
+
         public Point(int row, int column)
         {
-            Row = row;
-            Column = column;
+            _row = row;
+            _column = column;
         }
 
-        public int Row { get; set; }
+        public int Row => _row;
 
-        public int Column { get; set; }
+        public int Column => _column;
     }
 }
