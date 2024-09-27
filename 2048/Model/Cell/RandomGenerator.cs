@@ -1,19 +1,32 @@
-﻿using System;
+﻿using _2048.Model.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using static _2048.Model.Entities.RandomGenerator;
 
-namespace _2048
+namespace _2048.Model.Cell
 {
-    public partial class RandomGenerator
+    public class RandomGenerator
     {
-        private readonly List<Entity> _entities = new List<Entity>();
+        private readonly List<BlockValues> _entities = new List<BlockValues>();
         private readonly Random _rnd = new Random();
+
+        public RandomGenerator(List<BlockValues> blocksValues)
+        {
+            if (blocksValues.Sum(e => e.Probability) != 100)
+            {
+                throw new ArgumentException("The total probability of all values ​​is not 100%.");
+            }
+
+            foreach (var item in blocksValues)
+            {
+                Add(item.Value, item.Probability);
+            }
+        }
 
         public RandomGenerator Add(int value, double probability)
         {
-            _entities.Add(new Entity(probability, value));
-            _entities.Sort(new EntityComparer());
+            _entities.Add(new BlockValues(probability, value));
+            _entities.Sort(new BlockValuesComparer());
             return this;
         }
 

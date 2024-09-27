@@ -2,11 +2,14 @@
 using System;
 using System.Collections.Generic;
 
-namespace _2048
+namespace _2048.Model.Cell
 {
     public class FreeCell
     {
         private readonly List<Point> _list = new List<Point>();
+
+        public Point RandomEmptyCell()
+            => _list[new Random().Next(_list.Count)];
 
         public void Cell(int[,] items)
         {
@@ -24,8 +27,5 @@ namespace _2048
 
         private void Add(int row, int column)
             => _list.Add(new Point(row, column));
-
-        public Point RandomEmptyCell()
-            => _list[new Random().Next(_list.Count)];
     }
 }

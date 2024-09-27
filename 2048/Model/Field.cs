@@ -1,4 +1,5 @@
 ﻿using _2048.Extension;
+using _2048.Model.Cell;
 using System;
 
 
@@ -6,14 +7,22 @@ namespace _2048.Model
 {
     public class Field
     {
-        private const int FieldCells = 2;
-        private const int RandomCellFillAttempts = 4;
+        private const int StartFieldCells = 2;
 
         private readonly int[,] _items;
 
         private readonly Random _rnd = new Random();
-
         private readonly RandomGenerator _randomGenerator;
+
+        public Field(int size, RandomGenerator generator)
+        {
+            _randomGenerator = generator;
+            _items = new int[size, size];
+            for (var i = 0; i < StartFieldCells; i++)
+            {
+                _items[_rnd.Next(size), _rnd.Next(size)] = _randomGenerator.RandomValue();
+            }
+        }
 
         public int this[int i, int j]
         {
@@ -21,19 +30,11 @@ namespace _2048.Model
             set => _items[i, j] = value;
         }
 
-        public Field(int size, RandomGenerator generator)
-        {
-            _randomGenerator = generator;
-            _items = new int[size, size];
-            for (var i = 0; i < FieldCells; i++)
-            {
-                _items[_rnd.Next(size), _rnd.Next(size)] = _randomGenerator.RandomValue();
-            }
-        }
-
         public int Column => _items.GetLength(1);
 
         public int Row => _items.GetLength(0);
+
+        public int[,] Items => _items;
 
         public double Points()
         {
@@ -44,23 +45,6 @@ namespace _2048.Model
             }
 
             return summ;
-        }
-
-        public void FillOneOfTheRandomCells()
-        {
-            for (int i = 0; i < RandomCellFillAttempts; i++)
-            {
-                var row = _rnd.Next(Row);
-                var column = _rnd.Next(Column);
-
-                if (_items[row, column] == 0)
-                {
-                    _items[row, column] = _randomGenerator.RandomValue();
-                    return;
-                }
-            }
-
-            FillingTheEmptyCellValue();
         }
 
         public bool GameCheck()
@@ -139,14 +123,6 @@ namespace _2048.Model
             }
 
             return isMoveField;
-        }
-
-        private void FillingTheEmptyCellValue()
-        {
-            var list = new FreeCell();
-            list.Cell(_items);
-            var point = list.RandomEmptyCell();
-            _items[point.Row, point.Column] = _randomGenerator.RandomValue();
         }
 
         private bool TryAddingCellValues(int row, int column)

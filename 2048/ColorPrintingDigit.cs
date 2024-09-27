@@ -3,9 +3,9 @@ using System;
 
 namespace _2048
 {
-    class ColorPrintingDigit
+    public static class ColorPrintingDigit
     {
-        public static void Print(Field field)
+        public static void Print(this Field field)
         {
             for (int i = 0; i < field.Row; i++)
             {

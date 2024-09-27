@@ -46,12 +46,14 @@
   <ItemGroup>
     <Compile Include="ColorPrintingDigit.cs" />
     <Compile Include="Extension\MoveByPressingArrowExtension.cs" />
-    <Compile Include="FreeCell.cs" />
-    <Compile Include="Model\Entities\EntityComparer.cs" />
-    <Compile Include="Model\Entities\Entity.cs" />
+    <Compile Include="Model\Cell\FreeCell.cs" />
+    <Compile Include="Game.cs" />
+    <Compile Include="Model\Entities\BlockValuesComparer.cs" />
+    <Compile Include="Model\Entities\BlockValues.cs" />
+    <Compile Include="Model\RandomBlockValue.cs" />
     <Compile Include="Model\Field.cs" />
-    <Compile Include="Model\Point.cs" />
-    <Compile Include="RandomGenerator.cs" />
+    <Compile Include="Model\Cell\Point.cs" />
+    <Compile Include="Model\Cell\RandomGenerator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

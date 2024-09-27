@@ -1,4 +1,4 @@
-﻿namespace _2048.Model.Entities
+﻿namespace _2048.Model.Cell
 {
     public class Point
     {

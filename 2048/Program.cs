@@ -1,39 +1,12 @@
-﻿
-using _2048.Model;
-using System;
-
-namespace _2048
+﻿namespace _2048
 {
     class Program
     {
         static void Main(string[] args)
         {
-            int size = 4;
-            var valuetiles = new RandomGenerator();
-            valuetiles.Add(2, 90).Add(4, 10);
-            var field = new Field(size, valuetiles);
-            ColorPrintingDigit.Print(field);
-            do
-            {
-                ConsoleKeyInfo key = Console.ReadKey(true);
-                if (key.Key == ConsoleKey.Escape)
-                {
-                    return;
-                }
-
-                if (field.Movement(key))
-                {
-                    field.FillOneOfTheRandomCells();
-                    Console.Clear();
-                    ColorPrintingDigit.Print(field);
-                    Console.WriteLine($"Очки:{field.Points()}");
-                }
-            }
-            while (field.GameCheck());
-
-            Console.WriteLine("Игра окончена!");
-            Console.WriteLine($"Очки:{field.Points()}");
-            Console.ReadKey();
+            var sizeField = 4;
+            var game = new Game(sizeField);
+            game.Run();
         }
     }
 }
