@@ -14,6 +14,8 @@ namespace _2048.Model
         private readonly Random _rnd = new Random();
         private readonly RandomGenerator _randomGenerator;
 
+        private readonly Scope _scope = new Scope();
+
         public Field(int size, RandomGenerator generator)
         {
             _randomGenerator = generator;
@@ -30,22 +32,13 @@ namespace _2048.Model
             set => _items[i, j] = value;
         }
 
+        public int Scope => _scope.Value;
+
         public int Column => _items.GetLength(1);
 
         public int Row => _items.GetLength(0);
 
         public int[,] Items => _items;
-
-        public double Points()
-        {
-            var summ = 0;
-            foreach (var item in _items)
-            {
-                summ += item;
-            }
-
-            return summ;
-        }
 
         public bool GameCheck()
         {
@@ -53,7 +46,7 @@ namespace _2048.Model
             {
                 for (var j = 0; j < Column; j++)
                 {
-                    if (TryAddingCellValues(i, j) || _items[i, j] == 0)
+                    if (TryAddCellValues(i, j) || _items[i, j] == 0)
                     {
                         return true;
                     }
@@ -76,7 +69,7 @@ namespace _2048.Model
                         {
                             for (var k = j + 1; k < Row; k++)
                             {
-                                _items.MovedUpOrDownItems(i, j, k, ref isMoveField);
+                                _items.MovedUpOrDownItems(i, j, k, ref isMoveField, _scope);
                             }
                         }
                     }
@@ -89,7 +82,7 @@ namespace _2048.Model
                         {
                             for (var k = j - 1; k >= 0; k--)
                             {
-                                _items.MovedUpOrDownItems(i, j, k, ref isMoveField);
+                                _items.MovedUpOrDownItems(i, j, k, ref isMoveField, _scope);
                             }
                         }
                     }
@@ -102,7 +95,7 @@ namespace _2048.Model
                         {
                             for (var k = j - 1; k >= 0; k--)
                             {
-                                _items.MovedRightOrLeftItems(i, j, k, ref isMoveField);
+                                _items.MovedRightOrLeftItems(i, j, k, ref isMoveField, _scope);
                             }
                         }
                     }
@@ -115,7 +108,7 @@ namespace _2048.Model
                         {
                             for (var k = j + 1; k < Column; k++)
                             {
-                                _items.MovedRightOrLeftItems(i, j, k, ref isMoveField);
+                                _items.MovedRightOrLeftItems(i, j, k, ref isMoveField, _scope);
                             }
                         }
                     }
@@ -125,7 +118,7 @@ namespace _2048.Model
             return isMoveField;
         }
 
-        private bool TryAddingCellValues(int row, int column)
+        private bool TryAddCellValues(int row, int column)
         {
             if (column + 1 != Column && _items[row, column] == _items[row, column + 1])
             {
