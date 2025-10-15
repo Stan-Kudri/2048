@@ -32,6 +32,7 @@ namespace _2048
         public void Run()
         {
             _field.Print();
+            Console.WriteLine($"Очки:{_field.Scope}");
             do
             {
                 ConsoleKeyInfo key = Console.ReadKey(true);
@@ -45,13 +46,13 @@ namespace _2048
                     _randomBlockValue.FillOneOfTheRandomCells();
                     Console.Clear();
                     _field.Print();
-                    Console.WriteLine($"Очки:{_field.Points()}");
+                    Console.WriteLine($"Очки:{_field.Scope}");
                 }
             }
             while (_field.GameCheck());
 
             Console.WriteLine("Игра окончена!");
-            Console.WriteLine($"Очки:{_field.Points()}");
+            Console.WriteLine($"Очки:{_field.Scope}");
             Console.ReadKey();
         }
     }
